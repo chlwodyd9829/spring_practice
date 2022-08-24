@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -22,22 +26,45 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdminController {
     private final MemberService memberService;
+
+    @GetMapping("/")
+    public String home(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            model.addAttribute("loginForm",new LoginForm());
+            response.sendRedirect("login");
+            return "login";
+        }
+        Member loginMember = (Member)session.getAttribute("loginMember");
+        model.addAttribute("loginMember",loginMember);
+        return "admin/admin_home";
+    }
     @GetMapping("/login")
     public String login(Model model){
         model.addAttribute("loginForm",new LoginForm());
         return "login";
     }
 
-    @ResponseBody
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult){
+    public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request){
         if(bindingResult.hasErrors()){
             return "login";
         }
-        Optional<Member> member = memberService.login(loginForm.getLoginId(), loginForm.getPassword());
-        if(member.equals(null)){
-            return "없는 사용자";
+        Member loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword());
+        if(loginMember == null){
+            bindingResult.reject("loginFail","로그인 실패");
+            return "login";
         }
-        return "로그인";
+        HttpSession session = request.getSession();
+        session.setAttribute("loginMember",loginMember);
+        return "redirect:/";
+    }
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request,@ModelAttribute LoginForm loginForm){
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+        return "redirect:/login";
     }
 }

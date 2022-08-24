@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지</title>
+</head>
+<body>
+    <span th:text="${loginMember.id}">로그인</span>
+    <form action="/logout" method="post">
+        <button type="submit">logout</button>
+    </form>
+</body>
+</html>

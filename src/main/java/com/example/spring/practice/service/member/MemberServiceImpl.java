@@ -15,11 +15,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Optional<Member> login(String loginId, String password) {
-        Optional<Member> member = memberRepository.findById(loginId);
-        if(member.get().getPassword().equals(password)){
-            return member;
-        }
-        return null;
+    public Member login(String loginId, String password) {
+        return memberRepository.findById(loginId)
+                .filter(m->m.getPassword().equals(password)).orElse(null);
     }
 }
