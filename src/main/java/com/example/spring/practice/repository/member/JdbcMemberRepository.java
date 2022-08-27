@@ -38,4 +38,9 @@ public class JdbcMemberRepository implements MemberRepository {
         };
     }
 
+    @Override
+    public List<Member> findAll() {
+        String sql = "select * from member";
+        return jdbcTemplate.query(sql,memberRowMapper());
+    }
 }

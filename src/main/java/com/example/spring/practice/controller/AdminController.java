@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -37,6 +39,9 @@ public class AdminController {
         }
         Member loginMember = (Member)session.getAttribute("loginMember");
         model.addAttribute("loginMember",loginMember);
+
+        List<Member> members = memberService.members();
+        model.addAttribute("members",members);
         return "admin/admin_home";
     }
     @GetMapping("/login")

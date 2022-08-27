@@ -6,7 +6,7 @@ import com.example.spring.practice.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,5 +18,10 @@ public class MemberServiceImpl implements MemberService {
     public Member login(String loginId, String password) {
         return memberRepository.findById(loginId)
                 .filter(m->m.getPassword().equals(password)).orElse(null);
+    }
+
+    @Override
+    public List<Member> members() {
+        return memberRepository.findAll();
     }
 }
