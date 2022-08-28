@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <title>관리자페이지</title>
+    <style>
+        .field-error{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h2>회원가입</h2>
+        </div>
+        <form method="post" class="form-inline" th:object="${joinForm}">
+            <div class="form-group">
+                <label for="id" class="form-label">아이디</label>
+                <input type="text" id="id" class="form-control" autocomplete="off" th:field="*{id}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{id}">
+                    아이디오류
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" id="password" class="form-control" autocomplete="off" th:field="*{password}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{password}">
+                    비밀번호오류
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="form-label">이름</label>
+                <input type="text" id="name" class="form-control" autocomplete="off" th:field="*{name}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{name}">
+                    이름오류
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address" class="form-label">주소</label>
+                <input type="text" id="address" class="form-control" autocomplete="off" th:field="*{address}" th:errorclass="field-error">
+                <div class="field-error" th:errors="*{address}">
+                    주소오류
+                </div>
+            </div>
+            <div>
+                <button type="submit">회원가입</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

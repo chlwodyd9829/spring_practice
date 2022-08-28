@@ -5,16 +5,24 @@
     <title>관리자 페이지</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <style>
+        .navbar{
+            background-color : 	#b0c4de;
+        }
         .nav-item{
             margin-left:2em;
         }
-        .navbar{
-            border-radius:8px;
+        .container{
+            margin-top:10%;
+            margin-bottom:10%
         }
+        .col{
+            border: solid 1px;
+        }
+
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg ">
     <div class="container-fluid">
         <span class="navbar-brand">관리자페이지</span>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -48,10 +56,21 @@
     </div>
 </nav>
 <div class="container text-center">
+    <div class="row" style="background-color : 	#b0c4de;">
+        <label class="col" th:each="colName : ${colNames}" th:text="${colName}"></label>
+    </div>
     <div class="row" th:each="member : ${members}">
         <div class="col">
-            <span th:text="${member.id}">ID</span>
-            <span th:text="${member.password}">ID</span>
+            <label th:text="${member.id}">ID</label>
+        </div>
+        <div class="col">
+            <label th:text="${member.password}">password</label>
+        </div>
+        <div class="col">
+            <label th:text="${member.name}">name</label>
+        </div>
+        <div class="col">
+            <label th:text="${member.address}">address</label>
         </div>
     </div>
 </div>

@@ -11,4 +11,5 @@ public interface MemberRepository {
 
     public List<Member> findAll();
 
+    public List<String> getColNames();
 }

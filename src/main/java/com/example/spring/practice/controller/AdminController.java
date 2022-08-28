@@ -1,5 +1,6 @@
 package com.example.spring.practice.controller;
 
+import com.example.spring.practice.domain.member.JoinForm;
 import com.example.spring.practice.domain.member.LoginForm;
 import com.example.spring.practice.domain.member.Member;
 import com.example.spring.practice.service.member.MemberService;
@@ -40,7 +41,9 @@ public class AdminController {
         Member loginMember = (Member)session.getAttribute("loginMember");
         model.addAttribute("loginMember",loginMember);
 
+        List<String> colNames = memberService.colNames();
         List<Member> members = memberService.members();
+        model.addAttribute("colNames",colNames);
         model.addAttribute("members",members);
         return "admin/admin_home";
     }
@@ -70,6 +73,18 @@ public class AdminController {
         if(session != null){
             session.invalidate();
         }
+        return "redirect:/login";
+    }
+    @GetMapping("/join")
+    public String join(@ModelAttribute JoinForm joinForm){
+        return "join";
+    }
+    @PostMapping("/join")
+    public String join(@Validated @ModelAttribute JoinForm joinForm,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "join";
+        }
+        memberService.join(joinForm);
         return "redirect:/login";
     }
 }
