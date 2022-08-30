@@ -1,8 +1,11 @@
 package com.example.spring.practice.controller;
 
+import com.example.spring.practice.domain.item.Item;
+import com.example.spring.practice.domain.item.NewItem;
 import com.example.spring.practice.domain.member.JoinForm;
 import com.example.spring.practice.domain.member.LoginForm;
 import com.example.spring.practice.domain.member.Member;
+import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,11 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,8 +31,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdminController {
     private final MemberService memberService;
+    private final ItemService itemService;
 
-    @GetMapping("/")
+
+    @GetMapping("/admin")
     public String home(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         HttpSession session = request.getSession(false);
         if(session == null){
@@ -40,12 +44,14 @@ public class AdminController {
         }
         Member loginMember = (Member)session.getAttribute("loginMember");
         model.addAttribute("loginMember",loginMember);
-
         List<String> colNames = memberService.colNames();
         List<Member> members = memberService.members();
         model.addAttribute("colNames",colNames);
         model.addAttribute("members",members);
-        return "admin/admin_home";
+
+        List<Item> items = itemService.items();
+        model.addAttribute("items",items);
+        return "admin/home";
     }
     @GetMapping("/login")
     public String login(Model model){
@@ -65,7 +71,7 @@ public class AdminController {
         }
         HttpSession session = request.getSession();
         session.setAttribute("loginMember",loginMember);
-        return "redirect:/";
+        return "redirect:/admin";
     }
     @PostMapping("/logout")
     public String logout(HttpServletRequest request,@ModelAttribute LoginForm loginForm){
@@ -76,7 +82,9 @@ public class AdminController {
         return "redirect:/login";
     }
     @GetMapping("/join")
-    public String join(@ModelAttribute JoinForm joinForm){
+    public String join(JoinForm joinForm, Model model){
+
+        model.addAttribute("joinForm",new JoinForm());
         return "join";
     }
     @PostMapping("/join")
@@ -84,7 +92,31 @@ public class AdminController {
         if(bindingResult.hasErrors()){
             return "join";
         }
-        memberService.join(joinForm);
+        Member joinMember = memberService.join(joinForm);
+        if(joinMember == null){
+            bindingResult.addError(new ObjectError("exist","이미 존재하는 아이디: "+joinForm.getId()));
+            return "join";
+        }
         return "redirect:/login";
     }
+
+    @GetMapping("/admin/items/{id}")
+    public String item(@PathVariable Long id,Model model){
+        return null;
+    }
+
+    @GetMapping("/admin/items/new")
+    public String new_item(@ModelAttribute NewItem newItem){
+        return "admin/items/newItem";
+    }
+
+    @PostMapping("/admin/items/new")
+    public String new_Item(@Validated @ModelAttribute NewItem newItem, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "admin/items/newItem";
+        }
+        itemService.newItem(new Item(newItem.getName(),newItem.getPrice(), newItem.getQuantity(),newItem.getInfo()));
+        return "admin/home";
+    }
+
 }

@@ -1,7 +1,11 @@
 package com.example.spring.practice;
 
+import com.example.spring.practice.repository.Item.ItemRepository;
+import com.example.spring.practice.repository.Item.JdbcItemRepository;
 import com.example.spring.practice.repository.member.JdbcMemberRepository;
 import com.example.spring.practice.repository.member.MemberRepository;
+import com.example.spring.practice.service.item.ItemService;
+import com.example.spring.practice.service.item.ItemServiceImpl;
 import com.example.spring.practice.service.member.MemberService;
 import com.example.spring.practice.service.member.MemberServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -25,5 +29,14 @@ public class AppConfig {
     @Bean
     public MemberRepository memberRepository(){
         return new JdbcMemberRepository(dataSource());
+    }
+
+    @Bean
+    public ItemRepository itemRepository(){
+        return new JdbcItemRepository(dataSource());
+    }
+    @Bean
+    public ItemService itemService(){
+        return new ItemServiceImpl(itemRepository());
     }
 }

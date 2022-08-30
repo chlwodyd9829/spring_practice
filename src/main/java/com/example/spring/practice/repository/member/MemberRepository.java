@@ -1,6 +1,7 @@
 package com.example.spring.practice.repository.member;
 
 import com.example.spring.practice.domain.member.Member;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Optional;

@@ -74,5 +74,27 @@
         </div>
     </div>
 </div>
+<div class="container text-center">
+<!--    <div class="row" style="background-color : 	#b0c4de;">-->
+<!--        <label class="col" th:each="colName : ${colNames}" th:text="${colName}"></label>-->
+<!--    </div>-->
+    <div class="row" th:each="item : ${items}">
+        <div class="col">
+            <label th:text="${item.id}">ID</label>
+        </div>
+        <div class="col">
+            <label th:text="${item.name}">password</label>
+        </div>
+        <div class="col">
+            <label th:text="${item.price}">name</label>
+        </div>
+        <div class="col">
+            <label th:text="${item.quantity}">address</label>
+        </div>
+        <div class="col">
+            <label th:text="${item.info}">address</label>
+        </div>
+    </div>
+</div>
 </body>
 </html>

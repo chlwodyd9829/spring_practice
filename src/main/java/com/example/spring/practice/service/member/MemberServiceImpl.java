@@ -8,12 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+
 
     @Override
     public Member login(String loginId, String password) {
@@ -33,6 +35,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member join(JoinForm joinForm) {
+        Optional<Member> findMember = memberRepository.findById(joinForm.getId());
+        if(!findMember.isEmpty()){
+            return null;
+        }
         Member member = new Member(joinForm.getId(), joinForm.getPassword(), joinForm.getName(), joinForm.getAddress());
         Member saveMember = memberRepository.save(member);
         return saveMember;
