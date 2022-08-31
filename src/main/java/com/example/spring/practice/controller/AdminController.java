@@ -37,11 +37,6 @@ public class AdminController {
     @GetMapping("/admin")
     public String home(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         HttpSession session = request.getSession(false);
-        if(session == null){
-            model.addAttribute("loginForm",new LoginForm());
-            response.sendRedirect("login");
-            return "login";
-        }
         Member loginMember = (Member)session.getAttribute("loginMember");
         model.addAttribute("loginMember",loginMember);
         List<String> colNames = memberService.colNames();
