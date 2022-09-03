@@ -2,6 +2,7 @@ package com.example.spring.practice.controller;
 
 import com.example.spring.practice.domain.item.Item;
 import com.example.spring.practice.domain.item.NewItem;
+import com.example.spring.practice.domain.item.UpdateItem;
 import com.example.spring.practice.domain.member.JoinForm;
 import com.example.spring.practice.domain.member.LoginForm;
 import com.example.spring.practice.domain.member.Member;
@@ -18,6 +19,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.Binding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -97,7 +99,17 @@ public class AdminController {
 
     @GetMapping("/admin/items/{id}")
     public String item(@PathVariable Long id,Model model){
-        return null;
+        Item item = itemService.item(id);
+        model.addAttribute("item",item);
+        return "admin/items/item";
+    }
+    @PostMapping("/admin/items/{id}")
+    public String item(@PathVariable Long id, @Validated @ModelAttribute UpdateItem updateItem,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "admin/items/item";
+        }
+        itemService.updateItem(updateItem);
+        return "redirect:/admin";
     }
 
     @GetMapping("/admin/items/new")

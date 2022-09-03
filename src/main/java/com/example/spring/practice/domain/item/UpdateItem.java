@@ -3,26 +3,27 @@ package com.example.spring.practice.domain.item;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
-public class Item {
+public class UpdateItem {
+    @NotNull
     private Long id;
+    @NotEmpty
     private String name;
+    @NotNull
     private int price;
+    @NotNull
     private int quantity;
+
     private String info;
 
-
-    public Item(){}
-
-    public Item(String name, int price, int quantity, String info) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.info = info;
+    public UpdateItem(){
     }
 
-    public Item(Long id, String name, int price, int quantity, String info) {
+    public UpdateItem(Long id, String name, int price, int quantity, String info) {
         this.id = id;
         this.name = name;
         this.price = price;

@@ -1,10 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <title>상품 상세 정보</title>
+    <style>
+        .container{
+            width:40%;
+            height:40%;
+            margin-top:10%;
+            border:1px solid;
+            padding-top:10px;
+            padding-bottom:10px;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <form th:object="${item}" th:action="" method="post">
+            <div class="form-group">
+                <label for="id" class="form-label">상품 번호</label>
+                <input id="id" type="text" th:error-class="field-error" th:value="*{id}" class="form-control" readonly>
+                <div class="field-error">
+                    <label th:errors="*{id}">상품번호오류</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="form-label">상품명</label>
+                <input id="name" type="text" th:error-class="field-error" th:value="*{name}" class="form-control">
+                <div class="field-error">
+                    <label th:errors="*{name}">상품명 오류</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="form-label">상품 번호</label>
+                <input id="price" type="text" th:error-class="field-error" th:value="*{price}" class="form-control">
+                <div class="field-error">
+                    <label th:errors="*{price}">가격 오류</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="quantity" class="form-label">수량</label>
+                <input id="quantity" type="text" th:error-class="field-error" th:value="*{quantity}" class="form-control">
+                <div class="field-error">
+                    <label th:errors="*{quantity}">수량 오류</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="info" class="form-label">상품 번호</label>
+                <input id="info" type="text" th:error-class="field-error" th:value="*{info}" class="form-control">
+                <div class="field-error">
+                    <label th:errors="*{info}">가격 오류</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-secondary">수정</button>
 
+            </div>
+        </form>
+    </div>
 </body>
 </html>

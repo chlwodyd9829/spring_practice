@@ -2,6 +2,7 @@ package com.example.spring.practice.repository.Item;
 
 
 import com.example.spring.practice.domain.item.Item;
+import com.example.spring.practice.domain.item.UpdateItem;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -44,5 +45,11 @@ public class JdbcItemRepository implements ItemRepository {
     public List<Item> findAll() {
         String sql = "select * from item";
         return jdbcTemplate.query(sql, itemRowMapper());
+    }
+
+    @Override
+    public void updateItem(Item item) {
+        String sql = "update item set name=?,price=?,quantity=?,info=? where id=?";
+        jdbcTemplate.update(sql, item.getName(), item.getPrice(), item.getQuantity(), item.getInfo());
     }
 }
