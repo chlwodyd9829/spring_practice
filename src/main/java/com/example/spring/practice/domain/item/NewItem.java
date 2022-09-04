@@ -4,6 +4,7 @@ package com.example.spring.practice.domain.item;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -21,4 +22,6 @@ public class NewItem {
     private int quantity;
 
     private String info;
+
+    private MultipartFile multipartFile;
 }

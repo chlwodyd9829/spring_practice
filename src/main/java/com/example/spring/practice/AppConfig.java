@@ -5,6 +5,7 @@ import com.example.spring.practice.repository.Item.ItemRepository;
 import com.example.spring.practice.repository.Item.JdbcItemRepository;
 import com.example.spring.practice.repository.member.JdbcMemberRepository;
 import com.example.spring.practice.repository.member.MemberRepository;
+import com.example.spring.practice.service.FileStore;
 import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.item.ItemServiceImpl;
 import com.example.spring.practice.service.member.MemberService;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+
 
 import static com.example.spring.practice.repository.connection.ConnectionConst.*;
 
@@ -48,6 +50,10 @@ public class AppConfig implements WebMvcConfigurer {
     }
     @Bean
     public ItemService itemService(){
-        return new ItemServiceImpl(itemRepository());
+        return new ItemServiceImpl(itemRepository(),fileStore());
+    }
+    @Bean
+    public FileStore fileStore(){
+        return new FileStore();
     }
 }

@@ -42,10 +42,10 @@
                 </li>
             </ul>
         </div>
-        <div class="collapse navbar-collapse show" style="text-align:right; flex-grow:0;">
+        <div class="collapse navbar-collapse" style="text-align:right; flex-grow:0;">
             <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="#" th:text="${loginMember.id}">user</a>
+                <a class="nav-link" href="#" th:text="${loginMember?.id}">user</a>
             </li>
             <li class="nav-item" style="margin-left:0.5px;">
             <!--Todo 자바스크립트 써서 form 없이 post logout 요청                -->
@@ -79,8 +79,11 @@
 <!--        <label class="col" th:each="colName : ${colNames}" th:text="${colName}"></label>-->
 <!--    </div>-->
     <div class="row" th:each="item : ${items}">
+        <div th:if="item.uploadFile != null" class="col">
+            <img th:src="|/image/${item.getUploadFile().getStoreFileName()}|" width="300" height="300">
+        </div>
         <div class="col">
-            <label th:text="${item.id}">ID</label>
+            <a th:href="@{/admin/items/{id}(id=${item.id})}" th:text="${item.id}">ID</a>
         </div>
         <div class="col">
             <label th:text="${item.name}">password</label>
@@ -94,6 +97,9 @@
         <div class="col">
             <label th:text="${item.info}">address</label>
         </div>
+    </div>
+    <div>
+        <a href="/admin/items/new" class="btn btn-secondary" style="margin-top:5px; float:right">상품 등록</a>
     </div>
 </div>
 </body>

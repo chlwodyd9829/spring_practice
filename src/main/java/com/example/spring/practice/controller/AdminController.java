@@ -10,23 +10,21 @@ import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.Binding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -100,12 +98,14 @@ public class AdminController {
     @GetMapping("/admin/items/{id}")
     public String item(@PathVariable Long id,Model model){
         Item item = itemService.item(id);
-        model.addAttribute("item",item);
+        UpdateItem updateItem = new UpdateItem(item.getId(), item.getName(), item.getPrice(), item.getQuantity(), item.getInfo());
+        model.addAttribute("updateItem",updateItem);
         return "admin/items/item";
     }
     @PostMapping("/admin/items/{id}")
     public String item(@PathVariable Long id, @Validated @ModelAttribute UpdateItem updateItem,BindingResult bindingResult){
         if(bindingResult.hasErrors()){
+
             return "admin/items/item";
         }
         itemService.updateItem(updateItem);
@@ -118,12 +118,19 @@ public class AdminController {
     }
 
     @PostMapping("/admin/items/new")
-    public String new_Item(@Validated @ModelAttribute NewItem newItem, BindingResult bindingResult){
+    public String new_Item(@Validated @ModelAttribute NewItem newItem, BindingResult bindingResult) throws IOException {
         if(bindingResult.hasErrors()){
             return "admin/items/newItem";
         }
-        itemService.newItem(new Item(newItem.getName(),newItem.getPrice(), newItem.getQuantity(),newItem.getInfo()));
-        return "admin/home";
+        itemService.newItem(newItem);
+        return "redirect:/admin";
+    }
+    @ResponseBody
+    @GetMapping("/image/{filename}")
+    public Resource getImage(@PathVariable String filename) throws MalformedURLException {
+        String file = itemService.getFile(filename);
+        System.out.println("file = " + file);
+        return new UrlResource("file:"+ file);
     }
 
 }

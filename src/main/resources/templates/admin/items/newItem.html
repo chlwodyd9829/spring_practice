@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>상품 등록</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
     <style>
         .container{
             width:40%;
@@ -17,7 +17,11 @@
 </head>
 <body>
     <div class="container">
-        <form th:action="|@{/admin/items/new}|" method="post" th:object="${newItem}">
+        <form th:action="|@{/admin/items/new}|" method="post" th:object="${newItem}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">상품 사진</label>
+                <input type="file" id="file" th:field="*{multipartFile}">
+            </div>
             <div class="form-group">
                 <label for="name" class="form-label">상품명</label>
                 <input class="form-control" type="text" autocomplete="off" th:field="*{name}" id="name" th:errorclass="field-error">
@@ -47,7 +51,7 @@
                 </div>
             </div>
             <div>
-                <button type="submit">등록</button>
+                <button class="btn btn-secondary" type="submit">등록</button>
             </div>
         </form>
     </div>
