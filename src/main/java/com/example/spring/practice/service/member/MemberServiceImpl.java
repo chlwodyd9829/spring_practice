@@ -1,8 +1,10 @@
 package com.example.spring.practice.service.member;
 
 
+import com.example.spring.practice.domain.member.Classification;
 import com.example.spring.practice.domain.member.JoinForm;
 import com.example.spring.practice.domain.member.Member;
+import com.example.spring.practice.domain.member.UpdateMember;
 import com.example.spring.practice.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,8 +41,19 @@ public class MemberServiceImpl implements MemberService {
         if(!findMember.isEmpty()){
             return null;
         }
-        Member member = new Member(joinForm.getId(), joinForm.getPassword(), joinForm.getName(), joinForm.getAddress());
+        Member member = new Member(joinForm.getId(), joinForm.getPassword(), joinForm.getName(), joinForm.getAddress(), Classification.USER);
         Member saveMember = memberRepository.save(member);
         return saveMember;
+    }
+
+    @Override
+    public Member member(String id) {
+        return memberRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void update(UpdateMember updateMember) {
+        Member member = new Member(updateMember.getId(), updateMember.getPassword(), updateMember.getName(), updateMember.getAddress(), updateMember.getClassification());
+        memberRepository.update(member);
     }
 }

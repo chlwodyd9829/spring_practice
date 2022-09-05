@@ -18,7 +18,6 @@ public class JoinForm {
     private String name;
     @NotNull(message = "주소 입력")
     private String address;
-
     public JoinForm(){}
 
     public JoinForm(String id, String password, String name, String address) {

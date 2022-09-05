@@ -2,7 +2,8 @@ create table member(
 id varchar(20) primary key,
 password varchar(20) not null,
 name varchar(10) not null,
-address varchar(50)
+address varchar(50),
+classification varchar(15) not null
 );
 
 create table item(

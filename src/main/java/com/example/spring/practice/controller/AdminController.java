@@ -3,9 +3,7 @@ package com.example.spring.practice.controller;
 import com.example.spring.practice.domain.item.Item;
 import com.example.spring.practice.domain.item.NewItem;
 import com.example.spring.practice.domain.item.UpdateItem;
-import com.example.spring.practice.domain.member.JoinForm;
-import com.example.spring.practice.domain.member.LoginForm;
-import com.example.spring.practice.domain.member.Member;
+import com.example.spring.practice.domain.member.*;
 import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +31,10 @@ public class AdminController {
     private final MemberService memberService;
     private final ItemService itemService;
 
-
+    @ModelAttribute("classifications")
+    private Classification[] classifications(){
+        return Classification.values();
+    }
     @GetMapping("/admin")
     public String home(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         HttpSession session = request.getSession(false);
@@ -60,10 +61,6 @@ public class AdminController {
             return "login";
         }
         Member loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword());
-        if(loginMember == null){
-            bindingResult.reject("loginFail","로그인 실패");
-            return "login";
-        }
         HttpSession session = request.getSession();
         session.setAttribute("loginMember",loginMember);
         return "redirect:/admin";
@@ -78,7 +75,7 @@ public class AdminController {
     }
     @GetMapping("/join")
     public String join(JoinForm joinForm, Model model){
-
+        log.info("join request");
         model.addAttribute("joinForm",new JoinForm());
         return "join";
     }
@@ -94,7 +91,22 @@ public class AdminController {
         }
         return "redirect:/login";
     }
-
+    @GetMapping("/admin/member/{id}")
+    public String member(@PathVariable String id,Model model){
+        Member member = memberService.member(id);
+        UpdateMember updateMember = new UpdateMember(member.getId(), member.getPassword(), member.getName(), member.getAddress(), member.getClassification());
+        model.addAttribute("updateMember",updateMember);
+        return "admin/member/member";
+    }
+    @PostMapping("/admin/member/{id}")
+    public String member(@PathVariable String id, @Validated @ModelAttribute UpdateMember updateMember, BindingResult bindingResult){
+        if(bindingResult.hasErrors()) {
+            return "/admin/member/{id}";
+        }
+        log.info("classification = {}",updateMember.getClassification());
+        memberService.update(updateMember);
+        return "redirect:/admin";
+    }
     @GetMapping("/admin/items/{id}")
     public String item(@PathVariable Long id,Model model){
         Item item = itemService.item(id);

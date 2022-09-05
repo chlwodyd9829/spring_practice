@@ -61,7 +61,7 @@
     </div>
     <div class="row" th:each="member : ${members}">
         <div class="col">
-            <label th:text="${member.id}">ID</label>
+            <a th:href="|@{/admin/member/{id}(id=${member.id})}|" th:text="${member.id}">ID</a>
         </div>
         <div class="col">
             <label th:text="${member.password}">password</label>
@@ -71,6 +71,9 @@
         </div>
         <div class="col">
             <label th:text="${member.address}">address</label>
+        </div>
+        <div class="col">
+            <label th:text="${member.classification.getDescription()}"></label>
         </div>
     </div>
 </div>

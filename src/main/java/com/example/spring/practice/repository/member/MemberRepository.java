@@ -13,4 +13,6 @@ public interface MemberRepository {
     public List<Member> findAll();
 
     public List<String> getColNames();
+
+    public void update(Member member);
 }
