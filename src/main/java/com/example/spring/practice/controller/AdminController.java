@@ -144,5 +144,4 @@ public class AdminController {
         System.out.println("file = " + file);
         return new UrlResource("file:"+ file);
     }
-
 }

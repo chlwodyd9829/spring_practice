@@ -5,6 +5,8 @@ import com.example.spring.practice.repository.Item.ItemRepository;
 import com.example.spring.practice.repository.Item.JdbcItemRepository;
 import com.example.spring.practice.repository.member.JdbcMemberRepository;
 import com.example.spring.practice.repository.member.MemberRepository;
+import com.example.spring.practice.repository.order.JdbcOrderRepository;
+import com.example.spring.practice.repository.order.OrderRepository;
 import com.example.spring.practice.service.FileStore;
 import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.item.ItemServiceImpl;
@@ -55,5 +57,10 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public FileStore fileStore(){
         return new FileStore();
+    }
+
+    @Bean
+    public OrderRepository orderRepository(){
+        return new JdbcOrderRepository(dataSource());
     }
 }

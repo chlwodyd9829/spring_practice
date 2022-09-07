@@ -1,31 +1,27 @@
 package com.example.spring.practice.domain.order;
 
-import com.example.spring.practice.domain.item.Item;
-import com.example.spring.practice.domain.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Date;
 import java.util.Map;
 
 @Setter
 @Getter
 public class Order {
-    private Long id;
+    private String id;
+    private Date orderDate;
     private String memberId;
-    private String memberName;
-    private Map<Long,String> ItemName;
-    private Map<Long,Integer> ItemPrice;
-    private Map<Long,Integer> ItemQuantity;
-    private OrderStatus orderStatus;
+    private String address;
+    private OrderState orderState;
 
     public Order(){}
-    public Order(String memberId, String memberName, Map<Long, String> itemName, Map<Long, Integer> itemPrice, Map<Long, Integer> itemQuantity, OrderStatus orderStatus) {
+
+    public Order(String id, Date orderDate, String memberId, String address, OrderState orderState) {
+        this.id = id;
+        this.orderDate = orderDate;
         this.memberId = memberId;
-        this.memberName = memberName;
-        ItemName = itemName;
-        ItemPrice = itemPrice;
-        ItemQuantity = itemQuantity;
-        this.orderStatus = orderStatus;
+        this.address = address;
+        this.orderState = orderState;
     }
 }
