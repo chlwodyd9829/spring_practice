@@ -32,9 +32,9 @@ public class JdbcOrderRepository implements OrderRepository{
     }
 
     @Override
-    public Optional<Order> findByOrder(String orderId) {
+    public Order findByOrder(String orderId) {
         String sql = "select * from ordervo where id = ?";
-        return jdbcTemplate.query(sql, orderRowMapper(),orderId).stream().findAny();
+        return jdbcTemplate.query(sql, orderRowMapper(),orderId).stream().findAny().orElse(null);
     }
 
     @Override
@@ -57,6 +57,12 @@ public class JdbcOrderRepository implements OrderRepository{
         return jdbcTemplate.query(sql,orderRowMapper());
     }
 
+    @Override
+    public void update(Order order,OrderState orderState) {
+        String sql = "update ordervo set orderState=? where id = ?";
+        jdbcTemplate.update(sql, orderState.toString(),order.getId());
+    }
+
     private RowMapper<OrderDetail> orderDetailRowMapper(){
         return (rs,rowNum)->{
             OrderDetail orderDetail = new OrderDetail();
@@ -72,7 +78,7 @@ public class JdbcOrderRepository implements OrderRepository{
         return (rs, rowNum) ->{
             Order order = new Order();
             order.setId(rs.getString("id"));
-            order.setOrderDate(rs.getDate("orderDate"));
+            order.setOrderDate(rs.getString("orderDate"));
             order.setMemberId(rs.getString("memberId"));
             order.setAddress(rs.getString("address"));
             order.setOrderState(OrderState.valueOf(rs.getString("orderState")));

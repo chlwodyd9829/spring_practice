@@ -10,4 +10,6 @@ import java.util.Map;
 
 public interface OrderService {
     public Order makeOrder(Member member, List<Item> item, Map<Item,Integer> cnt) throws ParseException;
+
+    public void cancelOrder(String orderId);
 }

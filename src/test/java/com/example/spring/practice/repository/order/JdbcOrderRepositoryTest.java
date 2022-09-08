@@ -21,14 +21,14 @@ class JdbcOrderRepositoryTest {
     private final OrderRepository orderRepository = new JdbcOrderRepository(new DriverManagerDataSource(URL,USERNAME,PASSWORD));
     @Test
     void save(){
-        Order order = new Order("123", Timestamp.valueOf(LocalDateTime.now()), "asd", "qwewqe", OrderState.READY);
+        Order order = new Order("123", Timestamp.valueOf(LocalDateTime.now()).toString(), "asd", "qwewqe", OrderState.READY);
         OrderDetail orderDetail = new OrderDetail("qwe", order.getId(), 1L, 10000, 5);
 
         List<OrderDetail> orderDetailList = new ArrayList<>();
         orderDetailList.add(orderDetail);
         orderRepository.save(order,orderDetailList);
 
-        Order findOrder = orderRepository.findByOrder("123").stream().findAny().get();
+        Order findOrder = orderRepository.findByOrder("123");
         Assertions.assertThat(findOrder.getId()).isEqualTo(order.getId());
 
     }

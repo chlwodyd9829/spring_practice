@@ -12,7 +12,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.spi.CalendarNameProvider;
+
 
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
@@ -40,22 +40,30 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(order,orderDetailList);
         return order;
     }
+
+    @Override
+    public void cancelOrder(String orderId) {
+        Order order = orderRepository.findByOrder(orderId);
+        if(order == null || order.getOrderState().equals(OrderState.CANCEL)){
+            return;
+        }
+        order.setOrderState(OrderState.CANCEL);
+        orderRepository.update(order,OrderState.CANCEL);
+    }
+
     private String makeOrderDetailId(){
         return UUID.randomUUID().toString();
     }
     private String makeOrderId(){
-        String orderId = "";
-        orderId = date("yyyyMMddHHmmss");
-        return orderId + "_" + RandomStringUtils.random(5);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        Calendar calendar = Calendar.getInstance();
+        String orderId = simpleDateFormat.format(calendar.getTime());
+        return orderId + "_" + RandomStringUtils.random(5,false,true);
     }
-    private Date makeDate() throws ParseException {
-        String date = date("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return format.parse(date);
-    }
-    private String date(String pattern){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Calendar dateTime = Calendar.getInstance();
-        return simpleDateFormat.format(dateTime);
+    private String makeDate() throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        String format = simpleDateFormat.format(calendar.getTime());
+        return format;
     }
 }
