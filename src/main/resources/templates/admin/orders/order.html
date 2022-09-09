@@ -1,0 +1,116 @@
+<!doctype html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <title>주문상세정보</title>
+    <style>
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body{
+            font-family: 'GmarketSansMedium',snas-serif;
+            margin:0px;
+            padding:0px;
+        }
+        .container-sm{
+            align-items: center;
+            margin-top: 2em;
+        }
+        .form-inline{
+            margin:0.5px;
+            align-items: center;
+        }
+        .form-group {
+            margin : 3px;
+        }
+        .form-group p{
+            margin-top: 0.5px;
+            margin-bottom: 0.5px;
+        }
+        .row{
+            --bs-gutter-x:0;
+        }
+        .col{
+            margin-left: 5px;
+        }
+        .col input{
+            text-align: center;
+        }
+        .fixed-bottom{
+            float:left;
+            text-align:left;
+            margin:2em;
+            padding: 3px;
+            align-items: center;
+            align-content: center;
+            width:auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-sm text-center">
+        <div>
+            <h2>주문 상세 정보</h2>
+        </div>
+        <div>
+            <form method="post" th:object="${order}">
+                <div class="form-inline row border border-secondary rounded">
+                    <div class="form-group col border-bottom border-secondary">
+                        <p>주문번호</p>
+                        <span th:field="*{id}" th:text="*{id}" readonly>id</span>
+                    </div>
+                    <div class="form-group col border-bottom border-secondary">
+                        <p>주문시간</p>
+                        <span th:field="*{orderDate}" th:text="*{orderDate}">date</span>
+                    </div>
+                    <div class="form-group col border-bottom border-secondary">
+                        <p>주문자</p>
+                        <span th:field="*{memberId}" th:text="*{memberId}">memberId</span>
+                    </div>
+                    <div class="form-group row" style="display: inline">
+                        <p>주문상태</p>
+                        <select th:if="*{!orderState.equals(OrderState.CANCEL)}" th:field="*{orderState}" style="text-align: center;">
+                            <option value="">
+                                ===주문 상태 선택 ===
+                            </option>
+                            <option th:each="orderState : ${orderStates}"
+                                    th:value="${orderState}"
+                                    th:text="${orderState.getDescription()}"
+                            >
+                            </option>
+                        </select>
+                        <p th:unless="*{!orderState.equals(OrderState.CANCEL)}" style="color: red">취소</p>
+                    </div>
+                </div>
+                <div class="form-inline border border-secondary rounded row" th:each="orderDetail : ${orderDetails}">
+                    <div class="form-group col">
+                        <label class="form-label">상품사진</label>
+                    </div>
+                    <div class="form-group col">
+                        <label class="form-label" for="itemId">상품 번호</label>
+                        <input class="form-control" type="text" id="itemId" th:value="${orderDetail.itemId}" readonly>
+                    </div>
+                    <div class="form-group col">
+                        <label class="form-label" for="itemPrice">상품 가격</label>
+                        <input class="form-control" type="text" id="itemPrice" th:value="${orderDetail.itemPrice}" readonly>
+                    </div>
+                    <div class="form-group col">
+                        <label class="form-label" for="itemQuantity">상품 수량</label>
+                        <input class="form-control" type="text" id="itemQuantity" th:value="${orderDetail.itemQuantity}" readonly>
+                    </div>
+                </div>
+                <div class="row" style="text-align: right">
+                    <div class="fixed-bottom border-top border-secondary rounded">
+                        <p>총 결제 금액</p>
+                        <button th:if="*{!orderState.equals(OrderState.CANCEL)}" class="btn btn-secondary" style="float:right" type="submit">변경</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

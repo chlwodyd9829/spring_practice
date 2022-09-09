@@ -5,6 +5,15 @@
     <title>관리자 페이지</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <style>
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        *{
+            font-family: 'GmarketSansMedium',sans-serif;
+        }
         .navbar{
             background-color : 	#b0c4de;
         }
@@ -59,9 +68,9 @@
     <div class="row" style="background-color : 	#b0c4de;">
         <label class="col" th:each="colName : ${colNames}" th:text="${colName}"></label>
     </div>
-    <div class="row" th:each="member : ${members}">
+    <div class="row align-content-center" th:each="member : ${members}">
         <div class="col">
-            <a th:href="|@{/admin/member/{id}(id=${member.id})}|" th:text="${member.id}">ID</a>
+            <a class="rounded" th:href="|@{/admin/member/{id}(id=${member.id})}|" th:text="${member.id}">ID</a>
         </div>
         <div class="col">
             <label th:text="${member.password}">password</label>
@@ -83,7 +92,7 @@
 <!--    </div>-->
     <div class="row" th:each="item : ${items}">
         <div th:if="item.uploadFile != null" class="col">
-            <img th:src="|/image/${item.getUploadFile().getStoreFileName()}|" width="300" height="300">
+            <img th:src="|/image/${item.getUploadFile().getStoreFileName()}|" width="100" height="100">
         </div>
         <div class="col">
             <a th:href="@{/admin/items/{id}(id=${item.id})}" th:text="${item.id}">ID</a>
@@ -103,6 +112,25 @@
     </div>
     <div>
         <a href="/admin/items/new" class="btn btn-secondary" style="margin-top:5px; float:right">상품 등록</a>
+    </div>
+</div>
+<div class="container text-center">
+    <div class="row" th:each="order : ${orders}">
+        <div class="col">
+            <a th:href="@{/admin/orders/{id}(id=${order.id})}" th:text="${order.id}" onclick="window.open(this.href,'주문상세정보','width=800,height=600');return false">id</a>
+        </div>
+        <div class="col">
+            <label th:text="${order.orderDate}">date</label>
+        </div>
+        <div class="col">
+            <label th:text="${order.memberId}">memberId</label>
+        </div>
+        <div class="col">
+            <label th:text="${order.address}">address</label>
+        </div>
+        <div class="col">
+            <label th:text="${order.orderState.getDescription()}">state</label>
+        </div>
     </div>
 </div>
 </body>

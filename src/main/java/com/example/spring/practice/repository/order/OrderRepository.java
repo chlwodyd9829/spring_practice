@@ -17,5 +17,5 @@ public interface OrderRepository {
 
     public List<Order> findAll();
 
-    public void update(Order order, OrderState orderState);
+    public void update(Order order);
 }

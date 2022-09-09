@@ -4,6 +4,7 @@ import com.example.spring.practice.domain.item.Item;
 import com.example.spring.practice.domain.member.Classification;
 import com.example.spring.practice.domain.member.Member;
 import com.example.spring.practice.domain.order.Order;
+import com.example.spring.practice.domain.order.OrderState;
 import com.example.spring.practice.repository.order.JdbcOrderRepository;
 import com.example.spring.practice.repository.order.OrderRepository;
 import org.assertj.core.api.Assertions;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.example.spring.practice.repository.connection.ConnectionConst.*;
@@ -46,10 +48,11 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void orderCancel(){
-        String orderId = orderRepository.findAll().stream().findAny().get().getId();
+    void changeState(){
+        Order asd = new Order("111", LocalDateTime.now().toString(), "asd", "123", OrderState.READY);
+        String orderId = orderRepository.findAll().stream().filter(o->o.getId().equals("111")).findFirst().orElse(null).getId();
         Order order = orderRepository.findByOrder(orderId);
-        orderService.cancelOrder(order.getId());
+        orderService.changeState(order.getId(), OrderState.DELIVERY);
 
         Order findOrder = orderRepository.findByOrder(orderId);
 

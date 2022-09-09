@@ -42,13 +42,29 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void cancelOrder(String orderId) {
+    public void changeState(String orderId,OrderState orderState) {
         Order order = orderRepository.findByOrder(orderId);
         if(order == null || order.getOrderState().equals(OrderState.CANCEL)){
             return;
         }
-        order.setOrderState(OrderState.CANCEL);
-        orderRepository.update(order,OrderState.CANCEL);
+        order.setOrderState(orderState);
+        orderRepository.update(order);
+    }
+
+    @Override
+    public List<Order> orders() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public List<OrderDetail> findOrderDetail(String orderId) {
+        List<OrderDetail> orderDetailList = orderRepository.findByOrderId(orderId);
+        return orderDetailList;
+    }
+
+    @Override
+    public Order findOrder(String orderId) {
+        return orderRepository.findByOrder(orderId);
     }
 
     private String makeOrderDetailId(){

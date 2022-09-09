@@ -58,9 +58,9 @@ public class JdbcOrderRepository implements OrderRepository{
     }
 
     @Override
-    public void update(Order order,OrderState orderState) {
+    public void update(Order order) {
         String sql = "update ordervo set orderState=? where id = ?";
-        jdbcTemplate.update(sql, orderState.toString(),order.getId());
+        jdbcTemplate.update(sql, order.getOrderState().toString(),order.getId());
     }
 
     private RowMapper<OrderDetail> orderDetailRowMapper(){

@@ -12,6 +12,8 @@ import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.item.ItemServiceImpl;
 import com.example.spring.practice.service.member.MemberService;
 import com.example.spring.practice.service.member.MemberServiceImpl;
+import com.example.spring.practice.service.order.OrderService;
+import com.example.spring.practice.service.order.OrderServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -62,5 +64,9 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public OrderRepository orderRepository(){
         return new JdbcOrderRepository(dataSource());
+    }
+    @Bean
+    public OrderService orderService(){
+        return new OrderServiceImpl(orderRepository());
     }
 }

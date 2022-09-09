@@ -4,8 +4,12 @@ import com.example.spring.practice.domain.item.Item;
 import com.example.spring.practice.domain.item.NewItem;
 import com.example.spring.practice.domain.item.UpdateItem;
 import com.example.spring.practice.domain.member.*;
+import com.example.spring.practice.domain.order.Order;
+import com.example.spring.practice.domain.order.OrderDetail;
+import com.example.spring.practice.domain.order.OrderState;
 import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.member.MemberService;
+import com.example.spring.practice.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -31,9 +35,14 @@ public class AdminController {
     private final MemberService memberService;
     private final ItemService itemService;
 
+    private final OrderService orderService;
     @ModelAttribute("classifications")
     private Classification[] classifications(){
         return Classification.values();
+    }
+    @ModelAttribute("orderStates")
+    private OrderState[] orderStates(){
+        return OrderState.values();
     }
     @GetMapping("/admin")
     public String home(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
@@ -47,6 +56,9 @@ public class AdminController {
 
         List<Item> items = itemService.items();
         model.addAttribute("items",items);
+
+        List<Order> orders = orderService.orders();
+        model.addAttribute("orders",orders);
         return "admin/home";
     }
     @GetMapping("/login")
@@ -103,7 +115,6 @@ public class AdminController {
         if(bindingResult.hasErrors()) {
             return "/admin/member/{id}";
         }
-        log.info("classification = {}",updateMember.getClassification());
         memberService.update(updateMember);
         return "redirect:/admin";
     }
@@ -143,5 +154,18 @@ public class AdminController {
         String file = itemService.getFile(filename);
         System.out.println("file = " + file);
         return new UrlResource("file:"+ file);
+    }
+
+    @GetMapping("/admin/orders/{id}")
+    public String orderDetail(@PathVariable String id, Model model){
+        List<OrderDetail> orderDetails = orderService.findOrderDetail(id);
+        Order order = orderService.findOrder(id);
+        model.addAttribute("order",order);
+        model.addAttribute("orderDetails",orderDetails);
+        return "admin/orders/order";
+    }
+    @PostMapping("/admin/orders/{id}")
+    public String orderDetail(@ModelAttribute Order order){
+        return "redirect:/admin";
     }
 }

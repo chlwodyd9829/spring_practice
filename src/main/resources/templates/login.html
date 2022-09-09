@@ -5,8 +5,16 @@
     <title>로그인</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <style>
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        *{
+            font-family: 'GmarketSansMedium',sans-serif;
+        }
         .container{
-            border: 1px solid;
             text-align: center;
             margin-top:15%;
             width:35%;
@@ -25,7 +33,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container border border-secondary rounded">
     <div>
         <h2 style="margin-top:5px; margin-bottom:1em;">로그인</h2>
     </div>
@@ -45,7 +53,7 @@
                     비밀번호 오류
                 </div>
             </div>
-            <div>
+            <div style="text-align: right">
                 <a th:href="|@{/join}|">회원가입</a>
             </div>
             <div>
