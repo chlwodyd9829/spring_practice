@@ -1,5 +1,6 @@
 package com.example.spring.practice;
 
+import com.example.spring.practice.interceptor.AdminInterceptor;
 import com.example.spring.practice.interceptor.LoginInterceptor;
 import com.example.spring.practice.repository.Item.ItemRepository;
 import com.example.spring.practice.repository.Item.JdbcItemRepository;
@@ -14,6 +15,7 @@ import com.example.spring.practice.service.member.MemberService;
 import com.example.spring.practice.service.member.MemberServiceImpl;
 import com.example.spring.practice.service.order.OrderService;
 import com.example.spring.practice.service.order.OrderServiceImpl;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -32,6 +34,10 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
+                .excludePathPatterns("/join","/login","/logout","/error","/css/**");
+        registry.addInterceptor(new AdminInterceptor())
+                .order(2)
+                .addPathPatterns("/admin/**")
                 .excludePathPatterns("/join","/login","/logout","/error","/css/**");
     }
 
@@ -67,6 +73,6 @@ public class AppConfig implements WebMvcConfigurer {
     }
     @Bean
     public OrderService orderService(){
-        return new OrderServiceImpl(orderRepository());
+        return new OrderServiceImpl(orderRepository(),itemRepository());
     }
 }

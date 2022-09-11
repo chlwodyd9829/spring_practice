@@ -5,6 +5,8 @@ import com.example.spring.practice.domain.member.Classification;
 import com.example.spring.practice.domain.member.Member;
 import com.example.spring.practice.domain.order.Order;
 import com.example.spring.practice.domain.order.OrderState;
+import com.example.spring.practice.repository.Item.ItemRepository;
+import com.example.spring.practice.repository.Item.JdbcItemRepository;
 import com.example.spring.practice.repository.order.JdbcOrderRepository;
 import com.example.spring.practice.repository.order.OrderRepository;
 import org.assertj.core.api.Assertions;
@@ -22,12 +24,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class OrderServiceImplTest {
     OrderRepository orderRepository = new JdbcOrderRepository(new DriverManagerDataSource(URL,USERNAME,PASSWORD));
-    OrderService orderService = new OrderServiceImpl(orderRepository);
+    ItemRepository itemRepository = new JdbcItemRepository(new DriverManagerDataSource(URL, USERNAME, PASSWORD));
+    OrderService orderService = new OrderServiceImpl(orderRepository,itemRepository);
     @Test
     void makeOrder() throws ParseException {
         Member member = new Member("asd", "123", "spring", "asdsa", Classification.USER);
-        Item item1 = new Item(1L, "qwe", 5000, 50, "hi", null);
-        Item item2 = new Item(2L, "spring", 1000, 50, "hello", null);
+        Item item1 = new Item("4425278022_Fma","qwe", 5000, 50, "hi", null,null);
+        Item item2 = new Item("1960107769_AMf","spring", 1000, 50, "hello", null,null);
 
         List<Item> items = new ArrayList();
         items.add(item1);

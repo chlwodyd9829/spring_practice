@@ -5,6 +5,7 @@ import com.example.spring.practice.domain.member.Member;
 import com.example.spring.practice.domain.order.Order;
 import com.example.spring.practice.domain.order.OrderDetail;
 import com.example.spring.practice.domain.order.OrderState;
+import com.example.spring.practice.service.UploadFile;
 
 import java.text.ParseException;
 import java.util.List;
@@ -20,4 +21,5 @@ public interface OrderService {
     public List<OrderDetail> findOrderDetail(String orderId);
 
     public Order findOrder(String orderId);
+
 }

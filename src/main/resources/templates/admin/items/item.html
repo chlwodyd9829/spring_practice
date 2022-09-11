@@ -15,18 +15,38 @@
             font-family: 'GmarketSansMedium',sans-serif;
         }
         .container{
-            width:40%;
-            height:40%;
-            margin-top:10%;
-            border:1px solid;
+            width:fit-content;
             padding-top:10px;
             padding-bottom:10px;
+        }
+        .text-md-center{
+            margin-top:10px;
+        }
+        .form-control{
+            width:content-box;
+            margin-top:1px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <form th:object="${updateItem}" th:action="@{/admin/items/{id}(id=${updateItem?.id})}" method="post">
+    <div class="text-md-center" style="text-align: center;">
+        <h2>상품 정보</h2>
+    </div>
+    <div class="container border border-secondary rounded">
+        <form th:object="${updateItem}"  th:action="@{/admin/items/{id}(id=${updateItem?.id})}" method="post">
+            <div class="form-group" >
+                <label style="display: block">대표 사진</label>
+                <input type="image" th:src="@{|/image/*{uploadFile}|}" class="border border-secondary rounded-circle" width="80" height="80">
+            </div>
+            <div class="form-group row">
+                <label>상품 사진</label>
+                <div class="col-2" style="width:fit-content" th:value="*{uploadFileList}" th:each="file : *{UploadFileList}">
+                    <img th:src="|/image/${file}|" class="border border-secondary rounded" width="80" height="80">
+                </div>
+            </div>
+            <div class="form-group" style="margin: 10px; padding-bottom: 10px; border-bottom: 1px solid #dee2e6; text-align: right">
+                <a class="btn-sm btn-secondary" href="" style="text-decoration: none;">상품 사진 변경</a>
+            </div>
             <div class="form-group">
                 <label for="id" class="form-label">상품 번호</label>
                 <input id="id" type="text" th:error-class="field-error" th:field="*{id}" class="form-control" readonly>
@@ -62,9 +82,8 @@
                     <label th:errors="*{info}">상품 정보</label>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group row" style="margin-top:10px; padding-left: 10px; padding-right: 10px;">
                 <button type="submit" class="btn btn-secondary">수정</button>
-
             </div>
         </form>
     </div>

@@ -14,8 +14,15 @@
         *{
             font-family: 'GmarketSansMedium',sans-serif;
         }
+        #active {
+            background-color: #789ac7;
+        }
+        #deactive{
+            background-color: #b0c4de;
+        }
         .navbar{
             background-color : 	#b0c4de;
+            padding:0px;
         }
         .nav-item{
             margin-left:2em;
@@ -27,27 +34,29 @@
         .col{
             border: solid 1px;
         }
-
+        .nav-item{
+            width: fit-content;
+            margin:0px;
+        }
+        .navbar-nav{
+            width: fit-content;
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg ">
     <div class="container-fluid">
         <span class="navbar-brand">관리자페이지</span>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse show" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">사용자</a>
+                    <a id="active" class="nav-link" href="#member_div">사용자</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">상품</a>
+                    <a class="nav-link" href="#item_div">상품</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">주문</a>
+                    <a class="nav-link" href="#order_div">주문</a>
                 </li>
             </ul>
         </div>
@@ -57,14 +66,13 @@
                 <a class="nav-link" href="#" th:text="${loginMember?.id}">user</a>
             </li>
             <li class="nav-item" style="margin-left:0.5px;">
-            <!--Todo 자바스크립트 써서 form 없이 post logout 요청                -->
-                <button class="btn btn-secondary" style="font-size:10px; padding: 5px 8px; margin-top:5px;" th:onclick="|location.href='@{/logout}'|">로그아웃</button>
+                <button class="btn btn-secondary" style="font-size:10px; padding: 5px 8px; margin-top:5px;" onclick=sendLogout()>로그아웃</button>
             </li>
             </ul>
         </div>
     </div>
 </nav>
-<div class="container text-center">
+<div class="container text-center" id="member_div">
     <div class="row" style="background-color : 	#b0c4de;">
         <label class="col" th:each="colName : ${colNames}" th:text="${colName}"></label>
     </div>
@@ -86,16 +94,16 @@
         </div>
     </div>
 </div>
-<div class="container text-center">
+<div class="container text-center" id="item_div">
 <!--    <div class="row" style="background-color : 	#b0c4de;">-->
 <!--        <label class="col" th:each="colName : ${colNames}" th:text="${colName}"></label>-->
 <!--    </div>-->
     <div class="row" th:each="item : ${items}">
         <div th:if="item.uploadFile != null" class="col">
-            <img th:src="|/image/${item.getUploadFile().getStoreFileName()}|" width="100" height="100">
+            <img th:src="|/image/${item.getUploadFile()?.getStoreFileName()}|" width="100" height="100">
         </div>
         <div class="col">
-            <a th:href="@{/admin/items/{id}(id=${item.id})}" th:text="${item.id}">ID</a>
+            <a th:href="@{/admin/items/{id}(id=${item.id})}" th:text="${item.id}" onclick=>ID</a>
         </div>
         <div class="col">
             <label th:text="${item.name}">password</label>
@@ -114,10 +122,10 @@
         <a href="/admin/items/new" class="btn btn-secondary" style="margin-top:5px; float:right">상품 등록</a>
     </div>
 </div>
-<div class="container text-center">
+<div class="container text-center" id="order_div">
     <div class="row" th:each="order : ${orders}">
         <div class="col">
-            <a th:href="@{/admin/orders/{id}(id=${order.id})}" th:text="${order.id}" onclick="window.open(this.href,'주문상세정보','width=800,height=600');return false">id</a>
+            <a th:href="@{/admin/orders/{id}(id=${order.id})}" th:text="${order.id}">id</a>
         </div>
         <div class="col">
             <label th:text="${order.orderDate}">date</label>
@@ -133,5 +141,32 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    window.onload=function(){
+        document.getElementById("item_div").style.display="none";
+        document.getElementById("order_div").style.display="none";
+    }
+
+    let targetLink = document.querySelectorAll('.navbar-nav li');
+    let tabContent = ["member_div","item_div","order_div"];
+    for(let i in targetLink){
+        targetLink[i].addEventListener('click',function(e){
+            let OrgTarget = e.target.getAttribute("href");
+            e.target.setAttribute("id","active")
+            let tabTarget = OrgTarget.replace("#","");
+            for(j in tabContent){
+                document.getElementById(tabContent[j]).style.display = "none";
+            }
+            document.getElementById(tabTarget).style.display='block';
+        })
+    }
+    function sendLogout(){
+        let form = document.createElement("form");
+        form.setAttribute("method","post");
+        form.setAttribute("action","/logout");
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
 </body>
 </html>

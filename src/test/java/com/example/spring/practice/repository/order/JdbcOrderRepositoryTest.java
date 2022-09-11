@@ -22,7 +22,7 @@ class JdbcOrderRepositoryTest {
     @Test
     void save(){
         Order order = new Order("123", Timestamp.valueOf(LocalDateTime.now()).toString(), "asd", "qwewqe", OrderState.READY);
-        OrderDetail orderDetail = new OrderDetail("qwe", order.getId(), 1L, 10000, 5);
+        OrderDetail orderDetail = new OrderDetail("qwe", order.getId(), "ASD", 10000, 5,null);
 
         List<OrderDetail> orderDetailList = new ArrayList<>();
         orderDetailList.add(orderDetail);

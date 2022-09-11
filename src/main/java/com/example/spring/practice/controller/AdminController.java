@@ -7,6 +7,7 @@ import com.example.spring.practice.domain.member.*;
 import com.example.spring.practice.domain.order.Order;
 import com.example.spring.practice.domain.order.OrderDetail;
 import com.example.spring.practice.domain.order.OrderState;
+import com.example.spring.practice.service.UploadFile;
 import com.example.spring.practice.service.item.ItemService;
 import com.example.spring.practice.service.member.MemberService;
 import com.example.spring.practice.service.order.OrderService;
@@ -26,7 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -45,7 +49,7 @@ public class AdminController {
         return OrderState.values();
     }
     @GetMapping("/admin")
-    public String home(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
+    public String home(HttpServletRequest request, Model model) throws IOException {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
         model.addAttribute("loginMember",loginMember);
@@ -73,6 +77,10 @@ public class AdminController {
             return "login";
         }
         Member loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword());
+        if(loginMember == null){
+            bindingResult.reject("loginFail");
+            return "login";
+        }
         HttpSession session = request.getSession();
         session.setAttribute("loginMember",loginMember);
         return "redirect:/admin";
@@ -119,16 +127,21 @@ public class AdminController {
         return "redirect:/admin";
     }
     @GetMapping("/admin/items/{id}")
-    public String item(@PathVariable Long id,Model model){
+    public String item(@PathVariable String id,Model model){
         Item item = itemService.item(id);
-        UpdateItem updateItem = new UpdateItem(item.getId(), item.getName(), item.getPrice(), item.getQuantity(), item.getInfo());
+        List<String> storeFileNames = new ArrayList<>();
+        for (UploadFile uploadFile : item.getUploadFileList()) {
+            storeFileNames.add(uploadFile.getStoreFileName());
+        }
+        UpdateItem updateItem = new UpdateItem(item.getUploadFile().getStoreFileName(),storeFileNames,item.getId(), item.getName(), item.getPrice(), item.getQuantity(), item.getInfo());
         model.addAttribute("updateItem",updateItem);
         return "admin/items/item";
     }
     @PostMapping("/admin/items/{id}")
-    public String item(@PathVariable Long id, @Validated @ModelAttribute UpdateItem updateItem,BindingResult bindingResult){
+    public String item(Model model,@PathVariable String id, @Validated @ModelAttribute UpdateItem updateItem,BindingResult bindingResult){
+        log.info("call update item");
         if(bindingResult.hasErrors()){
-
+            log.info("updateItem.uploadFile={}",updateItem.getUploadFile());
             return "admin/items/item";
         }
         itemService.updateItem(updateItem);
@@ -160,12 +173,16 @@ public class AdminController {
     public String orderDetail(@PathVariable String id, Model model){
         List<OrderDetail> orderDetails = orderService.findOrderDetail(id);
         Order order = orderService.findOrder(id);
+        for (OrderDetail orderDetail : orderDetails) {
+            log.info("orderDetail.UploadFile ={}",orderDetail.getUploadFile());
+        }
         model.addAttribute("order",order);
         model.addAttribute("orderDetails",orderDetails);
         return "admin/orders/order";
     }
     @PostMapping("/admin/orders/{id}")
     public String orderDetail(@ModelAttribute Order order){
+        orderService.changeState(order.getId(),order.getOrderState());
         return "redirect:/admin";
     }
 }

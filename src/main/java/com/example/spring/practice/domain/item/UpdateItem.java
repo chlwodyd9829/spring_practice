@@ -1,21 +1,27 @@
 package com.example.spring.practice.domain.item;
 
+import com.example.spring.practice.service.UploadFile;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
 public class UpdateItem {
     @NotNull
-    private Long id;
-    @NotEmpty
+    private String uploadFile;
+    @NotNull
+    private List<String> uploadFileList;
+    @NotNull
+    private String id;
+    @NotEmpty(message = "이름을 입력하세요.")
     private String name;
-    @NotNull
+    @NotNull(message = "가격을 입력하세요.")
     private int price;
-    @NotNull
+    @NotNull(message = "수량을 입력하세요")
     private int quantity;
 
     private String info;
@@ -23,7 +29,9 @@ public class UpdateItem {
     public UpdateItem(){
     }
 
-    public UpdateItem(Long id, String name, int price, int quantity, String info) {
+    public UpdateItem(String uploadFile,List<String> uploadFiles,String id, String name, int price, int quantity, String info) {
+        this.uploadFile = uploadFile;
+        this.uploadFileList=uploadFiles;
         this.id = id;
         this.name = name;
         this.price = price;

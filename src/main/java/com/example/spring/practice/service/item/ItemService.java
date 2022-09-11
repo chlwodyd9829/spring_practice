@@ -12,7 +12,7 @@ public interface ItemService {
 
     public List<Item> items();
 
-    public Item item(Long id);
+    public Item item(String id);
 
     public void updateItem(UpdateItem updateItem);
 

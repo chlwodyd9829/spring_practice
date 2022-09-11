@@ -3,6 +3,7 @@ package com.example.spring.practice.repository.order;
 import com.example.spring.practice.domain.order.Order;
 import com.example.spring.practice.domain.order.OrderDetail;
 import com.example.spring.practice.domain.order.OrderState;
+import com.example.spring.practice.service.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.attoparser.trace.MarkupTraceEvent;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,9 +26,9 @@ public class JdbcOrderRepository implements OrderRepository{
         String sql = "insert into ordervo values(?,?,?,?,?)";
         jdbcTemplate.update(sql,order.getId(),order.getOrderDate(),order.getMemberId(),order.getAddress(),order.getOrderState().toString());
 
-        sql = "insert into orderDetail values(?,?,?,?,?)";
+        sql = "insert into orderDetail values(?,?,?,?,?,?,?)";
         for (OrderDetail orderDetail : orderDetailList) {
-            jdbcTemplate.update(sql,orderDetail.getId(),orderDetail.getOrderId(),orderDetail.getItemId(),orderDetail.getItemPrice(),orderDetail.getItemQuantity());
+            jdbcTemplate.update(sql,orderDetail.getId(),orderDetail.getOrderId(),orderDetail.getItemId(),orderDetail.getItemPrice(),orderDetail.getItemQuantity(),orderDetail.getUploadFile().getStoreFileName(),orderDetail.getUploadFile().getUploadFileName());
         }
     }
 
@@ -68,9 +69,10 @@ public class JdbcOrderRepository implements OrderRepository{
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setId(rs.getString("id"));
             orderDetail.setOrderId(rs.getString("orderId"));
-            orderDetail.setItemId(rs.getLong("itemId"));
+            orderDetail.setItemId(rs.getString("itemId"));
             orderDetail.setItemPrice(rs.getInt("itemPrice"));
             orderDetail.setItemQuantity(rs.getInt("itemQuantity"));
+            orderDetail.setUploadFile(new UploadFile(rs.getString("uploadFileName"),rs.getString("storeFileName")));
             return orderDetail;
         };
     }

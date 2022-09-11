@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +25,6 @@ public class NewItem {
     private String info;
 
     private MultipartFile multipartFile;
+
+    private List<MultipartFile> multipartFileList;
 }

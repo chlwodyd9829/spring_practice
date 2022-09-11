@@ -5,7 +5,9 @@ import com.example.spring.practice.domain.member.Member;
 import com.example.spring.practice.domain.order.Order;
 import com.example.spring.practice.domain.order.OrderDetail;
 import com.example.spring.practice.domain.order.OrderState;
+import com.example.spring.practice.repository.Item.ItemRepository;
 import com.example.spring.practice.repository.order.OrderRepository;
+import com.example.spring.practice.service.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -17,6 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
     @Override
     public Order makeOrder(Member member, List<Item> items, Map<Item,Integer> cnt) throws ParseException {
         Order order = new Order();
@@ -35,6 +38,7 @@ public class OrderServiceImpl implements OrderService{
             orderDetail.setItemId(item.getId());
             orderDetail.setItemPrice(item.getPrice());
             orderDetail.setItemQuantity(cnt.get(item));
+            orderDetail.setUploadFile(findUploadFile(item.getId()));
             orderDetailList.add(orderDetail);
         }
         orderRepository.save(order,orderDetailList);
@@ -65,6 +69,14 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Order findOrder(String orderId) {
         return orderRepository.findByOrder(orderId);
+    }
+
+    private UploadFile findUploadFile(String itemId) {
+        Item item = itemRepository.findById(itemId);
+        if(item == null){
+            return null;
+        }
+        return item.getUploadFile();
     }
 
     private String makeOrderDetailId(){

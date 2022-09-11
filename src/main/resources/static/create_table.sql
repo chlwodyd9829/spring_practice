@@ -7,11 +7,13 @@ classification varchar(15) not null
 );
 
 create table item(
-id bigint primary key auto_increment,
+id varchar(30) primary key,
 name varchar(10) not null,
 price integer not null,
 quantity integer not null,
-info varchar(100)
+info varchar(100),
+storefileName varchar(200),
+uploadfileName varchar(200)
 );
 
 create table orderVO(
@@ -25,7 +27,15 @@ orderState varchar(10) not null
 create table orderDetail(
 id varchar(40) primary key,
 orderId varchar(20) not null,
-itemId bigint not null,
+itemId varchar(30) not null,
 itemPrice integer not null,
-itemQuantity integer not null
+itemQuantity integer not null,
+storefileName varchar(200),
+uploadfileName varchar(200)
+);
+
+create table uploadFiles(
+    id varchar(30),
+    uploadFileName varchar(200),
+    storeFileName varchar(200)
 );
