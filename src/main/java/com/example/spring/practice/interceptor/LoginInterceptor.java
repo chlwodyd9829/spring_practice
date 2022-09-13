@@ -15,6 +15,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         log.info("requestURI={}",requestURI);
         HttpSession session = request.getSession(false);
 
+        if(request.getRequestURI().contains("/admin") && (session==null || session.getAttribute("loginMember") == null)){
+            response.sendRedirect("/admin/login");
+            return false;
+        }
+
         if(session == null || session.getAttribute("loginMember") == null){
             response.sendRedirect("/login");
             return false;

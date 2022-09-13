@@ -23,18 +23,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 public class AdminController {
     private final MemberService memberService;
     private final ItemService itemService;
@@ -48,7 +46,7 @@ public class AdminController {
     private OrderState[] orderStates(){
         return OrderState.values();
     }
-    @GetMapping("/admin")
+    @GetMapping
     public String home(HttpServletRequest request, Model model) throws IOException {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
@@ -65,21 +63,21 @@ public class AdminController {
         model.addAttribute("orders",orders);
         return "admin/home";
     }
-    @GetMapping("/login")
+    @GetMapping("login")
     public String login(Model model){
         model.addAttribute("loginForm",new LoginForm());
-        return "login";
+        return "admin/login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request){
         if(bindingResult.hasErrors()){
-            return "login";
+            return "admin/login";
         }
         Member loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword());
         if(loginMember == null){
             bindingResult.reject("loginFail");
-            return "login";
+            return "admin/login";
         }
         HttpSession session = request.getSession();
         session.setAttribute("loginMember",loginMember);
@@ -91,42 +89,24 @@ public class AdminController {
         if(session != null){
             session.invalidate();
         }
-        return "redirect:/login";
+        return "redirect:/admin/login";
     }
-    @GetMapping("/join")
-    public String join(JoinForm joinForm, Model model){
-        log.info("join request");
-        model.addAttribute("joinForm",new JoinForm());
-        return "join";
-    }
-    @PostMapping("/join")
-    public String join(@Validated @ModelAttribute JoinForm joinForm,BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return "join";
-        }
-        Member joinMember = memberService.join(joinForm);
-        if(joinMember == null){
-            bindingResult.addError(new ObjectError("exist","이미 존재하는 아이디: "+joinForm.getId()));
-            return "join";
-        }
-        return "redirect:/login";
-    }
-    @GetMapping("/admin/member/{id}")
+    @GetMapping("member/{id}")
     public String member(@PathVariable String id,Model model){
         Member member = memberService.member(id);
         UpdateMember updateMember = new UpdateMember(member.getId(), member.getPassword(), member.getName(), member.getAddress(), member.getClassification());
         model.addAttribute("updateMember",updateMember);
         return "admin/member/member";
     }
-    @PostMapping("/admin/member/{id}")
+    @PostMapping("member/{id}")
     public String member(@PathVariable String id, @Validated @ModelAttribute UpdateMember updateMember, BindingResult bindingResult){
         if(bindingResult.hasErrors()) {
-            return "/admin/member/{id}";
+            return "admin/member/{id}";
         }
         memberService.update(updateMember);
         return "redirect:/admin";
     }
-    @GetMapping("/admin/items/{id}")
+    @GetMapping("items/{id}")
     public String item(@PathVariable String id,Model model){
         Item item = itemService.item(id);
         List<String> storeFileNames = new ArrayList<>();
@@ -137,7 +117,7 @@ public class AdminController {
         model.addAttribute("updateItem",updateItem);
         return "admin/items/item";
     }
-    @PostMapping("/admin/items/{id}")
+    @PostMapping("items/{id}")
     public String item(Model model,@PathVariable String id, @Validated @ModelAttribute UpdateItem updateItem,BindingResult bindingResult){
         log.info("call update item");
         if(bindingResult.hasErrors()){
@@ -148,12 +128,12 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/items/new")
+    @GetMapping("items/new")
     public String new_item(@ModelAttribute NewItem newItem){
         return "admin/items/newItem";
     }
 
-    @PostMapping("/admin/items/new")
+    @PostMapping("items/new")
     public String new_Item(@Validated @ModelAttribute NewItem newItem, BindingResult bindingResult) throws IOException {
         if(bindingResult.hasErrors()){
             return "admin/items/newItem";
@@ -161,15 +141,8 @@ public class AdminController {
         itemService.newItem(newItem);
         return "redirect:/admin";
     }
-    @ResponseBody
-    @GetMapping("/image/{filename}")
-    public Resource getImage(@PathVariable String filename) throws MalformedURLException {
-        String file = itemService.getFile(filename);
-        System.out.println("file = " + file);
-        return new UrlResource("file:"+ file);
-    }
 
-    @GetMapping("/admin/orders/{id}")
+    @GetMapping("orders/{id}")
     public String orderDetail(@PathVariable String id, Model model){
         List<OrderDetail> orderDetails = orderService.findOrderDetail(id);
         Order order = orderService.findOrder(id);
@@ -180,7 +153,7 @@ public class AdminController {
         model.addAttribute("orderDetails",orderDetails);
         return "admin/orders/order";
     }
-    @PostMapping("/admin/orders/{id}")
+    @PostMapping("orders/{id}")
     public String orderDetail(@ModelAttribute Order order){
         orderService.changeState(order.getId(),order.getOrderState());
         return "redirect:/admin";

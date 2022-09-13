@@ -108,6 +108,7 @@
                         <p class="col" style="font-size: 1.5em;display:inline;border-bottom: 1px solid #6c757d">총 결제 금액</p>
                         <p class="col" id="sum" >총 금액</p>
                         <button th:if="*{!orderState.equals(OrderState.CANCEL)}" class="btn btn-secondary row-cols-auto" style="float:right" type="submit">변경</button>
+                        <a th:unless="*{!orderState.equals(OrderState.CANCEL)}" class="btn btn-secondary row-cols-auto" style="float:right" href="/admin">뒤로</a>
                     </div>
                 </div>
             </form>

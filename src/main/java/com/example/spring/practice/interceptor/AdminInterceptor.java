@@ -20,7 +20,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             PrintWriter writer = response.getWriter();
             writer.println("<script>alert('권한이 없습니다.'); history.go(-1)</script>");
             writer.flush();
-            response.sendRedirect("/login");
+            response.sendRedirect("/admin/login");
             return false;
         }
         return true;

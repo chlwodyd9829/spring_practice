@@ -34,11 +34,11 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/join","/login","/logout","/error","/css/**");
+                .excludePathPatterns("/join","/login","/logout","/error","/css/**","/admin/login","/home");
         registry.addInterceptor(new AdminInterceptor())
                 .order(2)
                 .addPathPatterns("/admin/**")
-                .excludePathPatterns("/join","/login","/logout","/error","/css/**");
+                .excludePathPatterns("/join","/login","/logout","/error","/css/**","/admin/login","home");
     }
 
     @Bean
