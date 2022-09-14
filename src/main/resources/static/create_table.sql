@@ -16,7 +16,7 @@ storefileName varchar(200),
 uploadfileName varchar(200)
 );
 
-create table orderVO(
+create table order_table(
 id varchar(20) primary key,
 orderDate varchar(20) not null,
 memberId varchar(20) not null,

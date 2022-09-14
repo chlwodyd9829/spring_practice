@@ -17,7 +17,6 @@ import java.util.Optional;
 @Repository
 public class JdbcMemberRepository implements MemberRepository {
     private final JdbcTemplate jdbcTemplate;
-    public static List<String> ColNames = null;
 
     public JdbcMemberRepository(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -43,9 +42,6 @@ public class JdbcMemberRepository implements MemberRepository {
         jdbcTemplate.update(sql, member.getPassword(), member.getName(), member.getAddress(), member.getClassification().toString(), member.getId());
     }
 
-    public List<String> getColNames(){
-        return ColNames;
-    }
     private RowMapper<Member> memberRowMapper() {
         return (rs,rowNum)->{
             Member member  = new Member();
@@ -54,13 +50,6 @@ public class JdbcMemberRepository implements MemberRepository {
             member.setName(rs.getString("name"));
             member.setAddress(rs.getString("address"));
             member.setClassification(Classification.valueOf(rs.getString("classification")));
-            if(ColNames == null){
-                ColNames = new ArrayList<>();
-                ResultSetMetaData metaData = rs.getMetaData();
-                for(int i=1; i<=metaData.getColumnCount();i++){
-                    ColNames.add(metaData.getColumnName(i));
-                }
-            }
             return member;
         };
     }

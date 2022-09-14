@@ -12,8 +12,6 @@ public interface MemberService {
     public Member member(String id);
     public List<Member> members();
 
-    public List<String> colNames();
-
     public Member join(JoinForm joinForm);
 
     public void update(UpdateMember updateMember);

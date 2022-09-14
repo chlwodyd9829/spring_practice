@@ -30,10 +30,6 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findAll();
     }
 
-    @Override
-    public List<String> colNames() {
-        return memberRepository.getColNames();
-    }
 
     @Override
     public Member join(JoinForm joinForm) {

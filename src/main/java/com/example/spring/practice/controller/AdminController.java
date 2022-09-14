@@ -1,5 +1,6 @@
 package com.example.spring.practice.controller;
 
+import com.example.spring.practice.domain.ColNames;
 import com.example.spring.practice.domain.item.Item;
 import com.example.spring.practice.domain.item.NewItem;
 import com.example.spring.practice.domain.item.UpdateItem;
@@ -46,14 +47,45 @@ public class AdminController {
     private OrderState[] orderStates(){
         return OrderState.values();
     }
+
+    @ModelAttribute("memberCols")
+    private List<ColNames> memberCols(){
+        List<ColNames> cols = new ArrayList<>();
+        cols.add(new ColNames("아이디"));
+        cols.add(new ColNames("비밀번호"));
+        cols.add(new ColNames("이름"));
+        cols.add(new ColNames("주소"));
+        cols.add(new ColNames("구분"));
+        return cols;
+    }
+    @ModelAttribute("itemCols")
+    private List<ColNames> itemCols(){
+        List<ColNames> cols = new ArrayList<>();
+        cols.add(new ColNames("대표사진"));
+        cols.add(new ColNames("상품번호"));
+        cols.add(new ColNames("상품명"));
+        cols.add(new ColNames("가격"));
+        cols.add(new ColNames("수량"));
+        cols.add(new ColNames("정보"));
+        return cols;
+    }
+    @ModelAttribute("orderCols")
+    private List<ColNames> orderCols(){
+        List<ColNames> cols = new ArrayList<>();
+        cols.add(new ColNames("주문번호"));
+        cols.add(new ColNames("주문시간"));
+        cols.add(new ColNames("주문자"));
+        cols.add(new ColNames("주소"));
+        cols.add(new ColNames("주문상태"));
+        return cols;
+    }
+
     @GetMapping
     public String home(HttpServletRequest request, Model model) throws IOException {
         HttpSession session = request.getSession(false);
         Member loginMember = (Member)session.getAttribute("loginMember");
         model.addAttribute("loginMember",loginMember);
-        List<String> colNames = memberService.colNames();
         List<Member> members = memberService.members();
-        model.addAttribute("colNames",colNames);
         model.addAttribute("members",members);
 
         List<Item> items = itemService.items();
@@ -76,7 +108,7 @@ public class AdminController {
         }
         Member loginMember = memberService.login(loginForm.getLoginId(), loginForm.getPassword());
         if(loginMember == null){
-            bindingResult.reject("loginFail");
+            bindingResult.reject("loginFail","아이디 혹은 비밀번호를 확인 해주세요.");
             return "admin/login";
         }
         HttpSession session = request.getSession();

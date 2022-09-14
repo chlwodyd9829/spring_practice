@@ -22,13 +22,6 @@
             margin-top:5%;
             margin-bottom:10%
         }
-        #active {
-            background-color: #353866;
-            color: #AAABD3;
-        }
-        #deactive{
-            background-color: #353866;
-        }
         .navbar{
             background-color : 	#353866;
             padding:0px;
@@ -58,7 +51,7 @@
         <div class="collapse navbar-collapse show" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a id="active" class="nav-link" href="#member_div">사용자</a>
+                    <a class="nav-link" href="#member_div">사용자</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#item_div">상품</a>
@@ -85,24 +78,26 @@
         <h2>회원 목록</h2>
     </div>
     <div>
-        <div class="row border-bottom border-secondary rounded">
-            <label class="col" th:each="colName : ${colNames}" th:text="${colName}"></label>
-        </div>
-        <div class="row align-content-center" th:each="member : ${members}">
-            <div class="col">
-                <a class="rounded" th:href="|@{/admin/member/{id}(id=${member.id})}|" th:text="${member.id}">ID</a>
+        <div class="row align-content-center rounded" style="background-color: #f0f0f0">
+            <div class="col" th:each="col:${memberCols}">
+                <label th:text="${col.colName}"></label>
             </div>
-            <div class="col">
-                <label th:text="${member.password}">password</label>
-            </div>
-            <div class="col">
-                <label th:text="${member.name}">name</label>
-            </div>
-            <div class="col">
-                <label th:text="${member.address}">address</label>
-            </div>
-            <div class="col">
-                <label th:text="${member.classification.getDescription()}"></label>
+            <div class="row" th:each="member : ${members}">
+                <div class="col">
+                    <a class="rounded" th:href="|@{/admin/member/{id}(id=${member.id})}|" th:text="${member.id}">ID</a>
+                </div>
+                <div class="col">
+                    <label th:text="${member.password}">password</label>
+                </div>
+                <div class="col">
+                    <label th:text="${member.name}">name</label>
+                </div>
+                <div class="col">
+                    <label th:text="${member.address}">address</label>
+                </div>
+                <div class="col">
+                    <label th:text="${member.classification.getDescription()}"></label>
+                </div>
             </div>
         </div>
     </div>
@@ -111,24 +106,29 @@
     <div>
         <h2>상품 목록</h2>
     </div>
-    <div class="row" th:each="item : ${items}">
-        <div th:if="item.uploadFile != null" class="col">
-            <img th:src="|/image/${item.getUploadFile()?.getStoreFileName()}|" width="100" height="100">
+    <div class="row align-items-center rounded" style="background-color: #f0f0f0">
+        <div class="col" th:each="col:${itemCols}">
+            <label th:text="${col.colName}"></label>
         </div>
-        <div class="col">
-            <a th:href="@{/admin/items/{id}(id=${item.id})}" th:text="${item.id}" onclick=>ID</a>
-        </div>
-        <div class="col">
-            <label th:text="${item.name}">password</label>
-        </div>
-        <div class="col">
-            <label th:text="${item.price}">name</label>
-        </div>
-        <div class="col">
-            <label th:text="${item.quantity}">address</label>
-        </div>
-        <div class="col">
-            <label th:text="${item.info}">address</label>
+        <div class="row" th:each="item : ${items}">
+            <div th:if="item.uploadFile != null" class="col" style="margin-right:10px;">
+                <img class="rounded" th:src="|/image/${item.getUploadFile()?.getStoreFileName()}|" width="100" height="100">
+            </div>
+            <div class="col">
+                <a th:href="@{/admin/items/{id}(id=${item.id})}" th:text="${item.id}" onclick=>ID</a>
+            </div>
+            <div class="col">
+                <label th:text="${item.name}">password</label>
+            </div>
+            <div class="col">
+                <label th:text="${item.price}">name</label>
+            </div>
+            <div class="col">
+                <label th:text="${item.quantity}">address</label>
+            </div>
+            <div class="col">
+                <label th:text="${item.info}">address</label>
+            </div>
         </div>
     </div>
     <div>
@@ -139,21 +139,26 @@
     <div>
         <h2>주문 목록</h2>
     </div>
-    <div class="row" th:each="order : ${orders}">
-        <div class="col">
-            <a th:href="@{/admin/orders/{id}(id=${order.id})}" th:text="${order.id}">id</a>
+    <div class="row align-items-center rounded" style="background-color: #f0f0f0">
+        <div class="col d-inline" th:each="col:${orderCols}">
+            <label th:text="${col.colName}"></label>
         </div>
-        <div class="col">
-            <label th:text="${order.orderDate}">date</label>
-        </div>
-        <div class="col">
-            <label th:text="${order.memberId}">memberId</label>
-        </div>
-        <div class="col">
-            <label th:text="${order.address}">address</label>
-        </div>
-        <div class="col">
-            <label th:text="${order.orderState.getDescription()}">state</label>
+        <div class="row" th:each="order : ${orders}">
+            <div class="col">
+                <a th:href="@{/admin/orders/{id}(id=${order.id})}" th:text="${order.id}">id</a>
+            </div>
+            <div class="col">
+                <label th:text="${order.orderDate}">date</label>
+            </div>
+            <div class="col">
+                <label th:text="${order.memberId}">memberId</label>
+            </div>
+            <div class="col">
+                <label th:text="${order.address}">address</label>
+            </div>
+            <div class="col">
+                <label th:text="${order.orderState.getDescription()}">state</label>
+            </div>
         </div>
     </div>
 </div>
@@ -162,14 +167,12 @@
     let targetLink = document.querySelectorAll('.navbar-nav li a');
     let tabContent = ["member_div","item_div","order_div"];
     for(let i in targetLink){
-        targetLink.item(i).setAttribute("id","deactive");
         targetLink[i].addEventListener('click',function(e){
             let OrgTarget = e.target.getAttribute("href");
             let tabTarget = OrgTarget.replace("#","");
             for(j in tabContent){
                 document.getElementById(tabContent[j]).style.display = "none";
             }
-            e.target.setAttribute("id","active");
             document.getElementById(tabTarget).style.display='block';
         })
     }

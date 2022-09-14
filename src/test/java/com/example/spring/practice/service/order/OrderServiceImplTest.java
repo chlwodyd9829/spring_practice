@@ -28,9 +28,9 @@ class OrderServiceImplTest {
     OrderService orderService = new OrderServiceImpl(orderRepository,itemRepository);
     @Test
     void makeOrder() throws ParseException {
-        Member member = new Member("asd", "123", "spring", "asdsa", Classification.USER);
-        Item item1 = new Item("4425278022_Fma","qwe", 5000, 50, "hi", null,null);
-        Item item2 = new Item("1960107769_AMf","spring", 1000, 50, "hello", null,null);
+        Member member = new Member("zxc", "111", "choi", "Home", Classification.USER);
+        Item item1 = new Item("4040750653_aHs","곰 인형", 5000, 5, "인형", null,null);
+        Item item2 = new Item("5007076965_EXq","컵", 500, 1000, "종이컵", null,null);
 
         List<Item> items = new ArrayList();
         items.add(item1);

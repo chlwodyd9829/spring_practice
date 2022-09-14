@@ -23,7 +23,7 @@ public class JdbcOrderRepository implements OrderRepository{
 
     @Override
     public void save(Order order, List<OrderDetail> orderDetailList) {
-        String sql = "insert into ordervo values(?,?,?,?,?)";
+        String sql = "insert into order_table values(?,?,?,?,?)";
         jdbcTemplate.update(sql,order.getId(),order.getOrderDate(),order.getMemberId(),order.getAddress(),order.getOrderState().toString());
 
         sql = "insert into orderDetail values(?,?,?,?,?,?,?)";
@@ -34,7 +34,7 @@ public class JdbcOrderRepository implements OrderRepository{
 
     @Override
     public Order findByOrder(String orderId) {
-        String sql = "select * from ordervo where id = ?";
+        String sql = "select * from order_table where id = ?";
         return jdbcTemplate.query(sql, orderRowMapper(),orderId).stream().findAny().orElse(null);
     }
 
@@ -47,20 +47,20 @@ public class JdbcOrderRepository implements OrderRepository{
 
     @Override
     public List<Order> findByMemberId(String memberId) {
-        String sql  = "select * from ordervo where = ?";
+        String sql  = "select * from order_table where = ?";
         List<Order> orderList = jdbcTemplate.query(sql, orderRowMapper(), memberId);
         return orderList;
     }
 
     @Override
     public List<Order> findAll() {
-        String sql = "select * from ordervo";
+        String sql = "select * from order_table";
         return jdbcTemplate.query(sql,orderRowMapper());
     }
 
     @Override
     public void update(Order order) {
-        String sql = "update ordervo set orderState=? where id = ?";
+        String sql = "update order_table set orderState=? where id = ?";
         jdbcTemplate.update(sql, order.getOrderState().toString(),order.getId());
     }
 
