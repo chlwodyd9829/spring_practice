@@ -15,6 +15,7 @@ import com.example.spring.practice.service.member.MemberService;
 import com.example.spring.practice.service.member.MemberServiceImpl;
 import com.example.spring.practice.service.order.OrderService;
 import com.example.spring.practice.service.order.OrderServiceImpl;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,7 @@ import static com.example.spring.practice.repository.connection.ConnectionConst.
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
@@ -40,6 +42,7 @@ public class AppConfig implements WebMvcConfigurer {
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/join","/login","/logout","/error","/css/**","/admin/login","home");
     }
+
 
     @Bean
     public DataSource dataSource(){

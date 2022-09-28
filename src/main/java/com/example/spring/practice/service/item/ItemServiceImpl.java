@@ -41,8 +41,6 @@ public class ItemServiceImpl implements ItemService{
     @Override
     public void updateItem(UpdateItem updateItem) {
         Item item = itemRepository.findById(updateItem.getId());
-//        item.setUploadFile(updateItem.getUploadFile());
-//        item.setUploadFileList(updateItem.getUploadFileList());
         item.setId(updateItem.getId());
         item.setName(updateItem.getName());
         item.setPrice(updateItem.getPrice());
